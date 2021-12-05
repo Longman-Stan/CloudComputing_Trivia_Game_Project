@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  main_db:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: "quiz_db"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "pass"
+    volumes:
+       - postgres_data:/var/lib/postgresql/data
+       - ./Initialization_files/dbscripts/init_main_db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5433:5432
+
+  pgadmin:
+    image: dpage/pgadmin4:4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@mail.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    volumes:
+       - pgadmin_data:/var/lib/pgadmin4/data
+       - ./Initialization_files/servers.json:/pgadmin4/servers.json
+    ports: 
+      - 8880:80
+    depends_on:
+      - main_db
+
+  auth_db:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: Auth_users
+      POSTGRES_USER: Authenticator
+      POSTGRES_PASSWORD: 1234
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+      - ./Initialization_files/dbscripts/init_auth_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    ports:
+      - 5432:5432
+
+volumes:
+  auth_db_data: {}
+  postgres_data: {}
+  pgadmin_data: {}

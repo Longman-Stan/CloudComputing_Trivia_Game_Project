@@ -1,0 +1,13 @@
+{
+	"Servers": {
+		"1": {
+			"Name": "Quiz_Server",
+			"Group": "Servers",
+			"Host": "main_db",
+			"Port": 5432,
+			"Username": "user",
+			"SSLMode": "prefer",
+			"MaintenanceDB": "postgres"
+		}
+	}
+}
